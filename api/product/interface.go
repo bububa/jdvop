@@ -78,6 +78,7 @@ type Sku struct {
 	Length                string `json:"Length,omitempty"` // 片长
 	MaterialDescription   string `json:"material_Description,omitempty"`
 	ReleaseDate           string `json:"ReleaseDate,omitempty"`
+	WxIntroduction        string `json:"wxintroduction,omitempty"`
 }
 
 type SkuImage struct {
