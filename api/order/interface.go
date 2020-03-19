@@ -1,5 +1,9 @@
 package order
 
+import (
+	"encoding/json"
+)
+
 type SkuNum struct {
 	SkuId      uint64  `json:"skuId,omitempty"`
 	Num        int     `json:"num,omitempty"`
@@ -89,42 +93,28 @@ type BizSku struct {
 	SplitFreight float64 `json:"splitFreight,omitempty"` // 运费拆分价格
 }
 
-type ParentOrder interface {
-	IsNumber() bool
-}
-
-type ParentOrderId uint64
-
-func (this ParentOrderId) IsNumber() bool {
-	return true
-}
-
 type Order struct {
-	ParentOrder   ParentOrder `json:"pOrder,omitempty"`     // 父订单号。为0时，此订单为父单, 父订单响应为父订单详情
-	ChildOrders   []Order     `json:"cOrder,omitempty"`     // 子订单详情
-	State         uint        `json:"orderState,omitempty"` // 订单状态。0为取消订单  1为有效。
-	Id            uint64      `json:"jdOrderId,omitempty"`
-	LogisticState uint        `json:"state,omitempty"`           // 物流状态。0 是新建  1是妥投   2是拒收
-	SubmitState   uint        `json:"submitState,omitempty"`     // 预占确认状态。0没确认预占。   1为确认预占。
-	Type          uint        `json:"type,omitempty"`            // 订单类型。1是父订单   2是子订单。
-	Freight       float64     `json:"freight,omitempty"`         // 运费
-	Skus          []BizSku    `json:"skus,omitempty"`            // 商品列表
-	Price         float64     `json:"orderPrice,omitempty"`      // 订单总金额。orderPrice(订单总金额)=商品总金额+运费
-	NakedPrice    float64     `json:"orderNakedPrice,omitempty"` // 订单未含税金额。
-	TaxPrice      float64     `json:"orderTaxPrice,omitempty"`   // 订单税额。
-	OrderType     uint        `json:"orderType,omitempty"`       // 订单类别。查询参数queryExts中包含orderType。参考枚举值如下：1.普通商品 2.大家电 3.实物礼品卡 4.售后换新单 5.厂家直送订单 6.FBP订单 7.生鲜 20.电子卡 21.机票 22.酒店 23.合约机号卡 24.火车票[@文祥：更新新订单类型；父单子单的订单类型形成规则。特殊说明虚拟订单，虚拟订单通常有专门的查询接口]
-	CreateTime    string      `json:"createOrderTime,omitempty"` // 订单创建时间。查询参数queryExts中包含createOrderTime。 输出格式为“yyyy-MM-dd hh:mm:ss”
-	FinishTime    string      `json:"finishTime,omitempty"`      // 订单创建时间。 查询参数queryExts中包含createOrderTime。 输出格式为“yyyy-MM-dd hh:mm:ss” 未完成时，此参数返回null。
-	OrderState    uint        `json:"jdOrderState,omitempty"`    // 京东状态。查询参数中包含queryExts=jdOrderState。参考枚举值如下：1.新单 2.等待支付 3.等待支付确认 4.延迟付款确认 5.订单暂停 6.店长最终审核 7.等待打印 8.等待出库 9.等待打包 10.等待发货 11.自提途中 12.上门提货 13.自提退货 14.确认自提 16.等待确认收货 17.配送退货 18.货到付款确认 19.已完成 21.收款确认 22.锁定 29.等待三方出库 30.等待三方发货 31.等待三方发货完成
-	Address       string      `json:"address,omitempty"`         // 加密后的收货地址。查询参数queryExts中包含address。 解密方式：AD+client_id前6位 解密规则：DES/CBC/PKCS5Padding，Hex
-	Name          string      `json:"name,omitempty"`            // 加密后的姓名。查询参数queryExts中包含name。解密方式：NA+client_id前6位，解密规则：DES/CBC/PKCS5Padding，Hex
-	Mobile        string      `json:"mobile,omitempty"`          // 加密后的联系方式。查询参数queryExts中包含mobile。解密方式：MO+client_id前6位 解密规则：DES/CBC/PKCS5Padding，Hex
-	PaymentType   int         `json:"paymentType,omitempty"`     // 支付方式 (1：货到付款， 4：在线支付，5：公司转账， 101：金采支付，20为混合支付)
-	PayDetails    []PayDetail `json:"payDeatails,omitempty"`     // 混合支付明细，当paymentType为20混合支付，返回值
-}
-
-func (this *Order) IsNumber() bool {
-	return false
+	ParentOrder   json.RawMessage `json:"pOrder,omitempty"`     // 父订单号。为0时，此订单为父单, 父订单响应为父订单详情
+	ChildOrders   []Order         `json:"cOrder,omitempty"`     // 子订单详情
+	State         uint            `json:"orderState,omitempty"` // 订单状态。0为取消订单  1为有效。
+	Id            uint64          `json:"jdOrderId,omitempty"`
+	LogisticState uint            `json:"state,omitempty"`           // 物流状态。0 是新建  1是妥投   2是拒收
+	SubmitState   uint            `json:"submitState,omitempty"`     // 预占确认状态。0没确认预占。   1为确认预占。
+	Type          uint            `json:"type,omitempty"`            // 订单类型。1是父订单   2是子订单。
+	Freight       float64         `json:"freight,omitempty"`         // 运费
+	Skus          []BizSku        `json:"skus,omitempty"`            // 商品列表
+	Price         float64         `json:"orderPrice,omitempty"`      // 订单总金额。orderPrice(订单总金额)=商品总金额+运费
+	NakedPrice    float64         `json:"orderNakedPrice,omitempty"` // 订单未含税金额。
+	TaxPrice      float64         `json:"orderTaxPrice,omitempty"`   // 订单税额。
+	OrderType     uint            `json:"orderType,omitempty"`       // 订单类别。查询参数queryExts中包含orderType。参考枚举值如下：1.普通商品 2.大家电 3.实物礼品卡 4.售后换新单 5.厂家直送订单 6.FBP订单 7.生鲜 20.电子卡 21.机票 22.酒店 23.合约机号卡 24.火车票[@文祥：更新新订单类型；父单子单的订单类型形成规则。特殊说明虚拟订单，虚拟订单通常有专门的查询接口]
+	CreateTime    string          `json:"createOrderTime,omitempty"` // 订单创建时间。查询参数queryExts中包含createOrderTime。 输出格式为“yyyy-MM-dd hh:mm:ss”
+	FinishTime    string          `json:"finishTime,omitempty"`      // 订单创建时间。 查询参数queryExts中包含createOrderTime。 输出格式为“yyyy-MM-dd hh:mm:ss” 未完成时，此参数返回null。
+	OrderState    uint            `json:"jdOrderState,omitempty"`    // 京东状态。查询参数中包含queryExts=jdOrderState。参考枚举值如下：1.新单 2.等待支付 3.等待支付确认 4.延迟付款确认 5.订单暂停 6.店长最终审核 7.等待打印 8.等待出库 9.等待打包 10.等待发货 11.自提途中 12.上门提货 13.自提退货 14.确认自提 16.等待确认收货 17.配送退货 18.货到付款确认 19.已完成 21.收款确认 22.锁定 29.等待三方出库 30.等待三方发货 31.等待三方发货完成
+	Address       string          `json:"address,omitempty"`         // 加密后的收货地址。查询参数queryExts中包含address。 解密方式：AD+client_id前6位 解密规则：DES/CBC/PKCS5Padding，Hex
+	Name          string          `json:"name,omitempty"`            // 加密后的姓名。查询参数queryExts中包含name。解密方式：NA+client_id前6位，解密规则：DES/CBC/PKCS5Padding，Hex
+	Mobile        string          `json:"mobile,omitempty"`          // 加密后的联系方式。查询参数queryExts中包含mobile。解密方式：MO+client_id前6位 解密规则：DES/CBC/PKCS5Padding，Hex
+	PaymentType   int             `json:"paymentType,omitempty"`     // 支付方式 (1：货到付款， 4：在线支付，5：公司转账， 101：金采支付，20为混合支付)
+	PayDetails    []PayDetail     `json:"payDeatails,omitempty"`     // 混合支付明细，当paymentType为20混合支付，返回值
 }
 
 type PayDetail struct {
