@@ -20,7 +20,7 @@ type Freight struct {
 	Freight             uint   `json:"freight,omitempty"`             // 总运费
 	BaseFreight         uint   `json:"baseFreight,omitempty"`         // 基础运费
 	RemoteRegionFreight uint   `json:"remoteRegionFreight,omitempty"` // 偏远地区加收运费
-	RemoteSku           uint64 `json:"remoteSku,omitempty"`           // 需收取偏远运费的sku
+	RemoteSku           string `json:"remoteSku,omitempty"`           // 需收取偏远运费的sku
 }
 
 type PromiseCalendarResult struct {
