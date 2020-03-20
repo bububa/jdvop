@@ -35,7 +35,7 @@ func (this *GetFreightRequest) Values() url.Values {
 	return values
 }
 
-func GetFreight(clt *jdvop.Client, skus []SkuNum, province string, city string, county string, town string, paymentType int) ([]Freight, error) {
+func GetFreight(clt *jdvop.Client, skus []SkuNum, province string, city string, county string, town string, paymentType int) (Freight, error) {
 	req := &GetFreightRequest{
 		Skus:        skus,
 		Province:    province,
@@ -48,7 +48,7 @@ func GetFreight(clt *jdvop.Client, skus []SkuNum, province string, city string, 
 	if err != nil {
 		return nil, err
 	}
-	var ret []Freight
+	var ret Freight
 	err = json.Unmarshal(resp, &ret)
 	if err != nil {
 		return nil, err
