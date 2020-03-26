@@ -30,12 +30,19 @@ func (this *GetCategoriesRequest) Values() url.Values {
 	return values
 }
 
-func (this *GetCategoriesRequest) Get(clt *jdvop.Client) (*Category, error) {
+type GetCategoriesResponse struct {
+	Total      int        `json:"totalRows,omitempty"`
+	Categories []Category `json:"categorys,omitempty"`
+	Page       int        `json:"pageNo,omitempty"`
+	Limit      int        `json:"pageSize,omitempty"`
+}
+
+func (this *GetCategoriesRequest) Get(clt *jdvop.Client) (*GetCategoriesResponse, error) {
 	resp, err := clt.Do(this)
 	if err != nil {
 		return nil, err
 	}
-	var ret Category
+	var ret GetCategoriesResponse
 	err = json.Unmarshal(resp, &ret)
 	if err != nil {
 		return nil, err
