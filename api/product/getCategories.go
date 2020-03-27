@@ -16,7 +16,7 @@ type GetCategoriesRequest struct {
 }
 
 func (this *GetCategoriesRequest) Method() string {
-	return "api/product/getCategories"
+	return "api/product/getCategorys"
 }
 
 func (this *GetCategoriesRequest) Values() url.Values {
