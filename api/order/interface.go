@@ -102,7 +102,7 @@ type Order struct {
 	SubmitState   uint            `json:"submitState,omitempty"`     // 预占确认状态。0没确认预占。   1为确认预占。
 	Type          uint            `json:"type,omitempty"`            // 订单类型。1是父订单   2是子订单。
 	Freight       float64         `json:"freight,omitempty"`         // 运费
-	Skus          []BizSku        `json:"skus,omitempty"`            // 商品列表
+	Skus          []BizSku        `json:"sku,omitempty"`             // 商品列表
 	Price         float64         `json:"orderPrice,omitempty"`      // 订单总金额。orderPrice(订单总金额)=商品总金额+运费
 	NakedPrice    float64         `json:"orderNakedPrice,omitempty"` // 订单未含税金额。
 	TaxPrice      float64         `json:"orderTaxPrice,omitempty"`   // 订单税额。
