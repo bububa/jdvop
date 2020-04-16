@@ -115,6 +115,7 @@ type Order struct {
 	Mobile        string          `json:"mobile,omitempty"`          // 加密后的联系方式。查询参数queryExts中包含mobile。解密方式：MO+client_id前6位 解密规则：DES/CBC/PKCS5Padding，Hex
 	PaymentType   int             `json:"paymentType,omitempty"`     // 支付方式 (1：货到付款， 4：在线支付，5：公司转账， 101：金采支付，20为混合支付)
 	PayDetails    []PayDetail     `json:"payDeatails,omitempty"`     // 混合支付明细，当paymentType为20混合支付，返回值
+	OutTime       string          `json:"outTime,omitempty"`         // 京东配送订单的出库时间/厂家直送订单的确认发货时间
 }
 
 type PayDetail struct {
@@ -135,8 +136,8 @@ type OrderTrack struct {
 }
 
 type WaybillCode struct {
-	OrderId         uint64 `json:"orderId,omitempty"`
-	ParentId        uint64 `json:"parentId,omitempty"`
-	Carrier         string `json:"carrier,omitempty"`         // 承运商。可以为“京东快递”或者商家自行录入的承运商名称。
-	DeliveryOrderId string `json:"deliveryOrderId,omitempty"` // 运单号。
+	OrderId         json.Number `json:"orderId,omitempty"`
+	ParentId        json.Number `json:"parentId,omitempty"`
+	Carrier         string      `json:"carrier,omitempty"`         // 承运商。可以为“京东快递”或者商家自行录入的承运商名称。
+	DeliveryOrderId string      `json:"deliveryOrderId,omitempty"` // 运单号。
 }

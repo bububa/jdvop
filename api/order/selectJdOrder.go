@@ -14,7 +14,7 @@ type SelectJdOrderRequest struct {
 }
 
 func (this *SelectJdOrderRequest) Method() string {
-	return "api/order/selectJdOrderIdByThirdOrder"
+	return "api/order/selectJdOrder"
 }
 
 func (this *SelectJdOrderRequest) Values() url.Values {
