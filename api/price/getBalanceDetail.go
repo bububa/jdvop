@@ -22,9 +22,15 @@ func (this *GetBalanceDetailRequest) Method() string {
 
 func (this *GetBalanceDetailRequest) Values() url.Values {
 	values := url.Values{}
-	values.Set("orderId", this.OrderId)
-	values.Set("startDate", this.StartDate)
-	values.Set("endDate", this.EndDate)
+	if this.OrderId != "" {
+		values.Set("orderId", this.OrderId)
+	}
+	if this.StartDate != "" {
+		values.Set("startDate", this.StartDate)
+	}
+	if this.EndDate != "" {
+		values.Set("endDate", this.EndDate)
+	}
 	if this.PageNum > 0 {
 		values.Set("pageNum", strconv.FormatInt(int64(this.PageNum), 10))
 	}
